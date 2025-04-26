@@ -1,23 +1,32 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Bit Art</title>
   </head>
   <body style="display: flex; justify-content: center">
     <main style="display: flex; flex-flow: column; align-items: center">
-      <h1 style="font-family: monospace; font-size: xxx-large">Bit Art Experiment</h1>
+      <h1 style="font-family: monospace; font-size: xxx-large">
+        Bit Art Experiment
+      </h1>
       <canvas
         width="512"
         height="512"
-        style="display: block; image-rendering: pixelated"
+        style="display: block; image-rendering: pixelated; max-width: 100%"
       ></canvas>
       <form style="width: 100%; padding: 5px">
         <label style="display: flex; justify-content: stretch">
-          f(x, y) = <input type="text" style="flex: 1 0" value="x ^ y" />
+          f(x, y) =
+          <input type="text" style="flex: 1 0" value="x ^ y" />
         </label>
       </form>
-      <small><a href="https://github.com/iliazeus/bitart">https://github.com/iliazeus/bitart</a></small>
-      <small><a href="https://www.pondiverse.com">#pondiverse</a></small>
+      <a href="https://github.com/iliazeus/bitart" style="font-size: small">
+        https://github.com/iliazeus/bitart
+      </a>
+      <a href="https://www.pondiverse.com" style="font-size: small">
+        #pondiverse
+      </a>
     </main>
     <script type="module">
       import { addPondiverseButton } from "https://www.pondiverse.com/script/pondiverse.js";
