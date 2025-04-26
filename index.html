@@ -21,6 +21,7 @@
           <input type="text" style="flex: 1 0" value="x ^ y" />
         </label>
       </form>
+      <div id="error" style="color: darkred"></div>
       <textarea
         style="width: 100%; min-height: 4em; resize: vertical"
         placeholder="scratchpad - paste ideas here"
@@ -38,6 +39,7 @@
       let canvas = document.querySelector("canvas");
       let form = document.querySelector("form");
       let input = document.querySelector("input");
+      let error = document.querySelector("#error");
 
       let draw = (f) => {
         let ctx = canvas.getContext("2d");
@@ -53,8 +55,14 @@
       };
 
       let update = () => {
-        let f = new Function("x", "y", "return " + input.value);
-        draw(f);
+        try {
+          let f = new Function("x", "y", "return " + input.value);
+          draw(f);
+          error.innerText = "";
+        } catch (e) {
+          error.innerText = e;
+          throw e;
+        }
       };
 
       update();
