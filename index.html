@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bit Art</title>
+  </head>
+  <body style="display: flex; justify-content: center">
+    <main style="display: flex; flex-flow: column; align-items: center">
+      <h1 style="font-family: monospace; font-size: xxx-large">Bit Art Experiment</h1>
+      <canvas
+        width="512"
+        height="512"
+        style="display: block; image-rendering: pixelated"
+      ></canvas>
+      <form style="width: 100%; padding: 5px">
+        <label style="display: flex; justify-content: stretch">
+          f(x, y) = <input type="text" style="flex: 1 0" value="x ^ y" />
+        </label>
+      </form>
+      <small><a href="https://github.com/iliazeus/bitart">https://github.com/iliazeus/bitart</a></small>
+      <small><a href="https://www.pondiverse.com">#pondiverse</a></small>
+    </main>
+    <script type="module">
+      import { addPondiverseButton } from "https://www.pondiverse.com/script/pondiverse.js";
+
+      let canvas = document.querySelector("canvas");
+      let form = document.querySelector("form");
+      let input = document.querySelector("input");
+
+      let draw = (f) => {
+        let ctx = canvas.getContext("2d");
+        let s = 2;
+
+        for (let y = 0; y < canvas.height; y += s) {
+          for (let x = 0; x < canvas.width; x += s) {
+            let c = f(x / s, y / s) & 0xff;
+            ctx.fillStyle = `rgb(${c} ${c} ${c})`;
+            ctx.fillRect(x, y, s, s);
+          }
+        }
+      };
+
+      let update = () => {
+        let f = new Function("x", "y", "return " + input.value);
+        draw(f);
+      };
+
+      update();
+      form.onsubmit = (e) => {
+        e.preventDefault();
+        update();
+      };
+
+      window.getPondiverseCreation = () => ({
+        type: "bitart",
+        data: JSON.stringify({ f: input.value }),
+        image: canvas.toDataURL("image/png"),
+      });
+      addPondiverseButton();
+    </script>
+  </body>
+</html>
