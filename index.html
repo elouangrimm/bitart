@@ -6,7 +6,14 @@
     <title>Bit Art</title>
   </head>
   <body style="display: flex; justify-content: center">
-    <main style="display: flex; flex-flow: column; align-items: center">
+    <main
+      style="
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        max-width: 512px;
+      "
+    >
       <h1 style="font-family: monospace; font-size: xxx-large">
         Bit Art Experiment
       </h1>
@@ -32,6 +39,31 @@
       <a href="https://www.pondiverse.com" style="font-size: small">
         #pondiverse
       </a>
+      <details style="width: 100%; margin-top: 1em">
+        <summary style="cursor: pointer; text-wrap-mode: wrap">
+          use this creation in your own tool!
+        </summary>
+        <p>
+          pondiverse should be
+          <a href="https://github.com/TodePond/Pondiverse/issues/19"
+            >about the types</a
+          >, not the tools
+        </p>
+        <p>this tool produces the <code>bitart</code> creation type</p>
+        <p>i would like to see other tools use this type</p>
+        <p>
+          its data is currently a JSON object with a single key
+          <code>"f"</code>, the value of which is a string containing a
+          JavaScript expression
+        </p>
+        <p>
+          see
+          <a href="https://github.com/iliazeus/bitart/blob/main/index.html"
+            >the code</a
+          >
+          for details on how it's interpreted
+        </p>
+      </details>
     </main>
     <script type="module">
       import { addPondiverseButton } from "https://www.pondiverse.com/script/pondiverse.js";
@@ -73,8 +105,11 @@
 
       window.getPondiverseCreation = () => ({
         type: "bitart",
-        data: JSON.stringify({ f: input.value }),
         image: canvas.toDataURL("image/png"),
+        data: JSON.stringify({
+          f: input.value,
+          _docs: `"f" is a string containing a JavaScript expression`,
+        }),
       });
       addPondiverseButton();
     </script>
