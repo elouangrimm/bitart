@@ -66,9 +66,10 @@
       </details>
     </main>
     <script type="module">
-      // import { addPondiverseButton } from "https://www.pondiverse.com/script/pondiverse.js";
-      // use an evil clone for prototyping
-      import { addPondiverseButton, fetchCreation } from "./pondiverse.js";
+      import * as pd from "https://www.pondiverse.com/script/pondiverse.js";
+
+      // or use an evil clone for prototyping
+      // import * as pd from "./pondiverse.js";
 
       let canvas = document.querySelector("canvas");
       let form = document.querySelector("form");
@@ -99,9 +100,11 @@
         }
       };
 
-      let creation = await fetchCreation().catch(() => null);
-      if (creation && creation.type === "bitart") {
-        input.value = creation.f;
+      if (pd.fetchCreation) {
+        let creation = await fetchCreation().catch(() => null);
+        if (creation && creation.type === "bitart") {
+          input.value = JSON.parse(creation.data).f;
+        }
       }
 
       update();
@@ -118,7 +121,7 @@
           _docs: `"f" is a string containing a JavaScript expression`,
         }),
       });
-      addPondiverseButton();
+      pd.addPondiverseButton();
     </script>
   </body>
 </html>
