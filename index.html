@@ -101,9 +101,33 @@
       };
 
       if (pd.fetchCreation) {
-        let creation = await fetchCreation().catch(() => null);
-        if (creation && creation.type === "bitart") {
-          input.value = JSON.parse(creation.data).f;
+        try {
+          let creation = await pd.fetchCreation();
+          if (creation && creation.type === "bitart") {
+            let code = JSON.parse(creation.data).f;
+            // laughably primitive, but I still feel the need to include
+            // at least some protections
+            // but this tool is still one big XSS anyway, so
+            if (
+              code.length > 100 ||
+              code.includes("{") ||
+              code.includes("eval") ||
+              code.includes("function")
+            ) {
+              // something fishy
+              if (
+                !window.confirm(
+                  "Code looks suspicious. Are you sure you want to continue?"
+                )
+              ) {
+                throw new Error("something fishy with this code");
+              }
+            }
+            input.value = code;
+          }
+        } catch (e) {
+          error.innerText = e;
+          throw e;
         }
       }
 
