@@ -110,6 +110,7 @@
             creationId = `https://pondiverse.val.run/get-creation?id=${creationId}`;
           }
 
+          let creation = await fetchJson(creationId);
           if (creation && creation.type === "bitart") {
             let code = JSON.parse(creation.data).f;
             // laughably primitive, but I still feel the need to include
