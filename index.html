@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -66,8 +66,13 @@
       </details>
     </main>
     <script type="module">
-      // import * as pd from "https://www.pondiverse.com/pondiverse.js";
-      import * as pd from "https://iliazeus.lol/puddle/button.js";
+      import * as pondiverseCom from "https://www.pondiverse.com/pondiverse.js";
+      import * as puddle from "https://iliazeus.lol/puddle/button.js";
+
+      import {
+        fetchJson,
+        postJson,
+      } from "https://iliazeus.lol/puddle/library.js";
 
       let canvas = document.querySelector("canvas");
       let form = document.querySelector("form");
@@ -98,9 +103,13 @@
         }
       };
 
-      if (pd.fetchCreation) {
+      let creationId = new URL(window.location).searchParams.get("creation");
+      if (creationId) {
         try {
-          let creation = await pd.fetchCreation();
+          if (!isNaN(creationId)) {
+            creationId = `https://pondiverse.val.run/get-creation?id=${creationId}`;
+          }
+
           if (creation && creation.type === "bitart") {
             let code = JSON.parse(creation.data).f;
             // laughably primitive, but I still feel the need to include
@@ -135,7 +144,7 @@
         update();
       };
 
-      window.getPondiverseCreation = () => ({
+      let getPondiverseCreation = () => ({
         type: "bitart",
         image: canvas.toDataURL("image/png"),
         data: JSON.stringify({
@@ -143,7 +152,12 @@
           _docs: `"f" is a string containing a JavaScript expression`,
         }),
       });
-      pd.addPondiverseButton("https://iliazeus.lol/puddle/instance.json");
+
+      pondiverseCom.addPondiverseButton(getPondiverseCreation);
+      puddle.addPondiverseButton(
+        "https://iliazeus.lol/puddle/instance.json",
+        getPondiverseCreation
+      );
     </script>
   </body>
 </html>
