@@ -1,154 +1,158 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Bit Art</title>
-  </head>
-  <body style="display: flex; justify-content: center">
-    <main
-      style="
-        display: flex;
-        flex-flow: column;
-        align-items: center;
-        max-width: 512px;
-      "
-    >
-      <h1 style="font-family: monospace; font-size: xxx-large">
-        Bit Art Experiment
-      </h1>
-      <canvas
-        width="512"
-        height="512"
-        style="display: block; image-rendering: pixelated; max-width: 100%"
-      ></canvas>
-      <form style="width: 100%; padding: 5px">
-        <label style="display: flex; justify-content: stretch">
-          f(x, y) =
-          <input type="text" style="flex: 1 0" value="x ^ y" />
-        </label>
-      </form>
-      <div id="error" style="color: darkred"></div>
-      <textarea
-        style="width: 100%; min-height: 4em; resize: vertical"
-        placeholder="scratchpad - paste ideas here"
-      ></textarea>
-      <a href="https://github.com/iliazeus/bitart" style="font-size: small">
-        https://github.com/iliazeus/bitart
-      </a>
-      <a href="https://www.pondiverse.com" style="font-size: small">
-        #pondiverse
-      </a>
-      <details style="width: 100%; margin-top: 1em">
-        <summary style="cursor: pointer; text-wrap-mode: wrap">
-          use this creation in your own tool!
-        </summary>
-        <p>
-          pondiverse should be
-          <a href="https://github.com/TodePond/Pondiverse/issues/19"
-            >about the types</a
-          >, not the tools
-        </p>
-        <p>this tool produces the <code>bitart</code> creation type</p>
-        <p>i would like to see other tools use this type</p>
-        <p>
-          its data is currently a JSON object with a single key
-          <code>"f"</code>, the value of which is a string containing a
-          JavaScript expression
-        </p>
-        <p>
-          see
-          <a href="https://github.com/iliazeus/bitart/blob/main/index.html"
-            >the code</a
-          >
-          for details on how it's interpreted
-        </p>
-      </details>
-    </main>
-    <script type="module">
-      import * as pv from "https://iliazeus.lol/puddle/pondiverse.js";
 
-      let canvas = document.querySelector("canvas");
-      let form = document.querySelector("form");
-      let input = document.querySelector("input");
-      let error = document.querySelector("#error");
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bit Art</title>
 
-      let draw = (f) => {
-        let ctx = canvas.getContext("2d");
-        let s = 2;
+  <!-- from elouan.xyz, some basic and minimal styles just like todepond! -->
+  <link rel="stylesheet" href="default.css" />
+  <link rel="stylesheet" href="style.css" />
 
-        for (let y = 0; y < canvas.height; y += s) {
-          for (let x = 0; x < canvas.width; x += s) {
-            let c = f(x / s, y / s) & 0xff;
-            ctx.fillStyle = `rgb(${c} ${c} ${c})`;
-            ctx.fillRect(x, y, s, s);
-          }
-        }
-      };
+  <!-- additional styles -->
+  <style>
+    body {
+      display: flex;
+      justify-content: center
+    }
 
-      let update = () => {
-        try {
-          let f = new Function("x", "y", "return " + input.value);
-          draw(f);
-          error.innerText = "";
-        } catch (e) {
-          error.innerText = e;
-          throw e;
-        }
-      };
+    main {
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      max-width: 512px;
+    }
+  </style>
+</head>
 
-      let creationId = new URL(window.location).searchParams.get("creation");
-      if (creationId) {
-        try {
-          if (!isNaN(creationId)) {
-            creationId = `https://pondiverse.val.run/get-creation?id=${creationId}`;
-          }
+<body>
+  <main>
+    <h1 style="font-family: monospace; font-size: xxx-large">
+      Bit Art Experiment
+    </h1>
+    <canvas width="512" height="512" style="display: block; image-rendering: pixelated; max-width: 100%"></canvas>
+    <form style="width: 100%; padding: 5px">
+      <label style="display: flex; justify-content: stretch">
+        f(x, y) =
+        <input type="text" style="flex: 1 0" value="x ^ y" />
+      </label>
+    </form>
+    <div id="error" style="color: darkred"></div>
+    <textarea style="width: 100%; min-height: 4em; resize: vertical"
+      placeholder="scratchpad - paste ideas here"></textarea>
+    <a href="https://github.com/iliazeus/bitart" style="font-size: small; color: var(--github)">
+      https://github.com/iliazeus/bitart
+    </a>
+    <a href="https://www.pondiverse.com" style="font-size: small">
+      #pondiverse
+    </a>
+    <details style="width: 100%; margin-top: 1em">
+      <summary style="cursor: pointer; text-wrap-mode: wrap">
+        use this creation in your own tool!
+      </summary>
+      <p>
+        pondiverse should be
+        <a href="https://github.com/TodePond/Pondiverse/issues/19">about the types</a>, not the tools
+      </p>
+      <p>this tool produces the <code>bitart</code> creation type</p>
+      <p>i would like to see other tools use this type</p>
+      <p>
+        its data is currently a JSON object with a single key
+        <code>"f"</code>, the value of which is a string containing a
+        JavaScript expression
+      </p>
+      <p>
+        see
+        <a href="https://github.com/iliazeus/bitart/blob/main/index.html">the code</a>
+        for details on how it's interpreted
+      </p>
+    </details>
+  </main>
+  <script type="module">
+    import * as pv from "https://iliazeus.lol/puddle/pondiverse.js";
 
-          let creation = await (await fetch(creationId)).json();
-          if (creation && creation.type === "bitart") {
-            let code = JSON.parse(creation.data).f;
-            // laughably primitive, but I still feel the need to include
-            // at least some protections
-            // but this tool is still one big XSS anyway, so
-            if (
-              code.length > 100 ||
-              code.includes("{") ||
-              code.includes("eval") ||
-              code.includes("function")
-            ) {
-              // something fishy
-              if (
-                !window.confirm(
-                  "Code looks suspicious. Are you sure you want to continue?"
-                )
-              ) {
-                throw new Error("something fishy with this code");
-              }
-            }
-            input.value = code;
-          }
-        } catch (e) {
-          error.innerText = e;
-          throw e;
+    let canvas = document.querySelector("canvas");
+    let form = document.querySelector("form");
+    let input = document.querySelector("input");
+    let error = document.querySelector("#error");
+
+    let draw = (f) => {
+      let ctx = canvas.getContext("2d");
+      let s = 2;
+
+      for (let y = 0; y < canvas.height; y += s) {
+        for (let x = 0; x < canvas.width; x += s) {
+          let c = f(x / s, y / s) & 0xff;
+          ctx.fillStyle = `rgb(${c} ${c} ${c})`;
+          ctx.fillRect(x, y, s, s);
         }
       }
+    };
 
+    let update = () => {
+      try {
+        let f = new Function("x", "y", "return " + input.value);
+        draw(f);
+        error.innerText = "";
+      } catch (e) {
+        error.innerText = e;
+        throw e;
+      }
+    };
+
+    let creationId = new URL(window.location).searchParams.get("creation");
+    if (creationId) {
+      try {
+        if (!isNaN(creationId)) {
+          creationId = `https://pondiverse.val.run/get-creation?id=${creationId}`;
+        }
+
+        let creation = await (await fetch(creationId)).json();
+        if (creation && creation.type === "bitart") {
+          let code = JSON.parse(creation.data).f;
+          // laughably primitive, but I still feel the need to include
+          // at least some protections
+          // but this tool is still one big XSS anyway, so
+          if (
+            code.length > 100 ||
+            code.includes("{") ||
+            code.includes("eval") ||
+            code.includes("function")
+          ) {
+            // something fishy
+            if (
+              !window.confirm(
+                "Code looks suspicious. Are you sure you want to continue?"
+              )
+            ) {
+              throw new Error("something fishy with this code");
+            }
+          }
+          input.value = code;
+        }
+      } catch (e) {
+        error.innerText = e;
+        throw e;
+      }
+    }
+
+    update();
+    form.onsubmit = (e) => {
+      e.preventDefault();
       update();
-      form.onsubmit = (e) => {
-        e.preventDefault();
-        update();
-      };
+    };
+    
+    input.addEventListener("input", update);
 
-      input.addEventListener("input", update);
-
-      pv.addPondiverseButton(() => ({
-        type: "bitart",
-        image: canvas.toDataURL("image/png"),
-        data: JSON.stringify({
-          f: input.value,
-          _docs: `"f" is a string containing a JavaScript expression`,
-        }),
-      }));
+    pv.addPondiverseButton(() => ({
+      type: "bitart",
+      image: canvas.toDataURL("image/png"),
+      data: JSON.stringify({
+        f: input.value,
+        _docs: `"f" is a string containing a JavaScript expression`,
+      }),
+    }));
     </script>
   </body>
 </html>
