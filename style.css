@@ -4,10 +4,6 @@ textarea {
     z-index: 2;
     display: block;
     height: 100%;
-    min-height: inherit;
-    font-family: var(--font-mono);
-    font-size: var(--editor-font-size);
-    line-height: var(--editor-line-height);
     white-space: pre;
     overflow-wrap: normal;
     overflow: auto;
@@ -19,7 +15,7 @@ textarea {
     background-color: var(--stone-800);
     color: var(--stone-100);
     border: 1px solid var(--stone-600);
-    padding: 10px;
+    padding: 5px;
     resize: vertical;
     margin-bottom: 1em;
 }
