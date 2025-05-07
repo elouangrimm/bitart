@@ -32,7 +32,7 @@ input[type="text"] {
     margin-bottom: 1em;
 }
 
-/* PONDIVERSE STUFF */
+/* PONDIVERSE STUFF 
 
 #pondiverse-controls {
     margin-top: 1.5em;
@@ -183,3 +183,5 @@ input[type="text"] {
 #pondiverse-dialog #preview-image:not([src=""]):not([style*="display: none"]) {
     margin-bottom: 1.5em;
 }
+
+*/
