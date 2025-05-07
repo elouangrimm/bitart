@@ -142,6 +142,8 @@
       e.preventDefault();
       update();
     };
+    
+    input.addEventListener("input", update);
 
     pv.addPondiverseButton(() => ({
       type: "bitart",
@@ -151,7 +153,6 @@
         _docs: `"f" is a string containing a JavaScript expression`,
       }),
     }));
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
