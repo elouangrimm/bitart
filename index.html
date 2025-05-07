@@ -139,6 +139,8 @@
         update();
       };
 
+      input.addEventListener("input", update);
+
       pv.addPondiverseButton(() => ({
         type: "bitart",
         image: canvas.toDataURL("image/png"),
